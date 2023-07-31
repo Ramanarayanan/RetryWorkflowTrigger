@@ -40,7 +40,7 @@ jobs:
                    echo $response
                     workflow_runs=$(echo "$response" | jq -r '.workflow_runs')
                     echo "This is workflow run"
-                    echo $workflow_runs
+                    # echo $workflow_runs
           echo $workflow_runs > workflow_runs.json
       
           latest_run=$(cat workflow_runs.json | jq 'max_by(.updated_at)')

@@ -45,12 +45,10 @@ jobs:
       
           latest_run=$(cat workflow_runs.json | jq 'max_by(.updated_at)')
           # echo $latest_run
-            $latest_run > latest_workflow_run.json
+           echo $latest_run > latest_workflow_run.json
 
       
-            cat latest_workflow_run.json
-
-   
+            cat latest_workflow_run.json 
          
       
             conclusion=$(echo "$latest_run" | jq -r '.conclusion')

@@ -48,7 +48,7 @@ jobs:
             $latest_run > latest_workflow_run.json
 
       
-           # cat latest_workflow_run.json
+            cat latest_workflow_run.json
 
    
          

@@ -48,7 +48,7 @@ jobs:
            printf "%s" $latest_run > latest_workflow_run.json
 
       
-            cat latest_workflow_run.json 
+            # cat latest_workflow_run.json 
          
       
             conclusion=$(echo "$latest_run" | jq -r '.conclusion')

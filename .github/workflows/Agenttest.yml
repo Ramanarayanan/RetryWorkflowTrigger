@@ -15,11 +15,11 @@ jobs:
     steps:
       - name: Display Welcome Message
         run: |
-          if ($env:RUNNER_OS -eq "Windows") {
-            Write-Output "Welcome to Powershell"
-          } elseif ($env:RUNNER_OS -eq "Linux") {
-            echo "Welcome to Bash"
-          } else {
+          if [ "$RUNNER_OS" == "Windows" ]; then
+            Write-Output "Running on Windows"
+          elif [ "$RUNNER_OS" == "Linux" ]; then
+            echo "Running on Linux"
+          else
             echo "Unsupported OS"
             exit 1
-          }
+          fi

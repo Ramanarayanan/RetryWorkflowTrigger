@@ -1,0 +1,63 @@
+# This is a basic workflow to help you get started with Actions
+
+name: RetryWith3AttemptsPw
+
+# Controls when the workflow will run
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: [parent1]
+    types: [completed]
+
+jobs:
+  on-success:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - run: echo 'The triggering workflow passed'
+  on-failure:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    steps:
+      - name: Trigger Workflow
+        id: trigger_workflow
+        run: |
+          for ($i=1; $i -le 3; $i++) {
+            $headers = @{
+              "Authorization" = "Bearer $env:GITHUB_TOKEN"
+              "Accept" = "application/vnd.github.v3+json"
+            }
+
+            $body = @{
+              "ref" = "main"
+            } | ConvertTo-Json
+
+            $response1 = Invoke-RestMethod -Uri "https://api.github.com/repos/$env:GITHUB_REPOSITORY/actions/workflows/parent1.yml/dispatches" -Method POST -Headers $headers -Body $body
+
+            Write-Host "Wait for 30 seconds to trigger dispatch event"
+
+            Start-Sleep -Seconds 30
+
+            $response = Invoke-RestMethod -Uri "https://api.github.com/repos/$env:GITHUB_REPOSITORY/actions/workflows/parent1.yml/runs" -Headers $headers
+
+            $workflow_runs = $response.workflow_runs
+            Write-Host "This is workflow run"
+            $workflow_runs | ConvertTo-Json | Out-File -FilePath workflow_runs.json
+
+            $latest_run = Get-Content -Path workflow_runs.json | ConvertFrom-Json | ForEach-Object { $_ } | Sort-Object -Property updated_at | Select-Object -Last 1 | ConvertTo-Json
+            $latest_run | Out-File -FilePath latest_workflow_run.json
+
+            $conclusion = $latest_run.conclusion
+
+            if ($conclusion -eq "success") {
+              Write-Host "Workflow is successful."
+              break
+            }
+            elseif ($i -eq 3) {
+              Write-Host "Workflow is not successful after 3 attempts. Exiting..."
+              exit 1
+            }
+            else {
+              Write-Host "Workflow is not successful. Retrying in 30 seconds..."
+            }
+          }

@@ -1,0 +1,25 @@
+name: Welcome Message
+
+on:
+ 
+  workflow_dispatch:
+
+jobs:
+  welcome_message:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+
+    steps:
+      - name: Display Welcome Message
+        run: |
+          if ($env:RUNNER_OS -eq "Windows") {
+            Write-Output "Welcome to Powershell"
+          } elseif ($env:RUNNER_OS -eq "Linux") {
+            echo "Welcome to Bash"
+          } else {
+            echo "Unsupported OS"
+            exit 1
+          }

@@ -6,7 +6,7 @@ name: RetryWith3AttemptsPw
 on:
   workflow_dispatch:
   workflow_run:
-    workflows: [parent1]
+    workflows: [parent3]
     types: [completed]
 
 jobs:
@@ -26,7 +26,7 @@ jobs:
           
             Write-Output ${{ secrets.GITHUB_TOKEN }}
             write-Host $env:GITHUB_REPOSITORY
-               $response = Invoke-RestMethod -Uri "https://api.github.com/repos/${{ github.repository }}/actions/workflows/parent1.yml/dispatches" `
+               $response = Invoke-RestMethod -Uri "https://api.github.com/repos/${{ github.repository }}/actions/workflows/parent3.yml/dispatches" `
             -Headers @{
               "Authorization" = "Bearer ${{ secrets.GITHUB_TOKEN }}"
               "Accept" = "application/vnd.github.v3+json"
@@ -36,7 +36,7 @@ jobs:
             
             Write-Host "Wait for 30 seconds to trigger dispatch event"
             Start-Sleep -Seconds 30
-             $response = Invoke-RestMethod -Uri "https://api.github.com/repos/${{ github.repository }}/actions/workflows/parent1.yml/runs" `
+             $response = Invoke-RestMethod -Uri "https://api.github.com/repos/${{ github.repository }}/actions/workflows/parent3.yml/runs" `
               -Headers @{ "Authorization" = "Bearer ${{ secrets.GITHUB_TOKEN }}" } `
               -Method Get
             $latest_run = $response.workflow_runs | Sort-Object -Property updated_at | Select-Object -Last 1

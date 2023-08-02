@@ -24,7 +24,7 @@ jobs:
         run: |
           for ($i=1; $i -le 3; $i++) {
           
-            Write-Output "Using GITHUB_TOKEN: $env:GITHUB_TOKEN"
+            Write-Output "$(gh auth token)"
             write-Host $env:GITHUB_REPOSITORY
 
             

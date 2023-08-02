@@ -26,9 +26,9 @@ jobs:
           
             Write-Output ${{ secrets.GITHUB_TOKEN }}
             write-Host $env:GITHUB_REPOSITORY
-               $response = Invoke-RestMethod -Uri "https://api.github.com/repos/${{ github.repository }}/actions/workflows/parent1/dispatches" `
+               $response = Invoke-RestMethod -Uri "https://api.github.com/repos/${{ github.repository }}/actions/workflows/NameOfYourTargetWorkflow/dispatches" `
             -Headers @{
-              "Authorization" = "Bearer +${{ secrets.GITHUB_TOKEN }}
+              "Authorization" = "Bearer ${{ secrets.GITHUB_TOKEN }}"
               "Accept" = "application/vnd.github.v3+json"
             } `
             -Method Post `

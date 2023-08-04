@@ -57,7 +57,14 @@ jobs:
            printf "%s" $latest_run > latest_workflow_run.json
            conclusion=$(echo "$latest_run" | jq -r '.conclusion')
            echo "$conclusion"
-        
+           if [[ "$conclusion" == "success" ]]; then
+              echo "Workflow is successful."
+              break
+            elif [[ "$i" == 3 ]]; then
+              echo "Workflow is not successful after 3 attempts. Exiting..."
+              exit 1
+            else
+              echo "Workflow is not successful. Retrying in 30 seconds..."
           done
   Build_NUnitTests:
     if: ${{ github.event_name == 'workflow_dispatch' }}

@@ -1,0 +1,91 @@
+name: Build_Dev
+on:
+  push:
+    branches:
+      - refs/heads/main
+  workflow_dispatch: {}
+  workflow_call: {}
+  workflow_run:
+    workflows: BuildAndUnitTest
+    types:
+      - completed
+env:
+  Test_Config_Param: test_config
+  test_env: test_env
+  test_system: test_system
+jobs:
+  on-success:
+    runs-on:
+      - self-hosted
+      - windows
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: meta_runner_test
+        run: |-
+          Consloe-Write "test meta runner"
+      - name: BuildStep_CommandLine
+        shell: cmd
+        run: |-
+          cd Test
+          echo "in test"
+  on-failure:
+    runs-on:      
+      - windows
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    steps:
+      - name: RetryTrigger
+        shell: cmd
+        run: |-
+          for ($i=1; $i -le 3; $i++){
+          $response = Invoke-RestMethod -Uri "https://api.github.com/repos/${{ github.repository }}/actions/workflows/BuildAndUnitTest.yml/dispatches"
+           -Headers @{
+           "Authorization" = "Bearer $${{ secrets.GITHUB_TOKEN }}"
+           "Accept" = "application/vnd.github.v3+json"
+          }
+           -Method Post
+           -Body (@{"ref":"main"}| ConvertTo-Json)
+            Write-Host "Wait for 30 seconds to trigger dispatch event"
+            Start-Sleep -Seconds 30
+          $response = Invoke-RestMethod -Uri "https://api.github.com/repos/${{ github.repository }}/actions/workflows/BuildAndUnitTest.yml/runs
+           -Headers @{
+            "Authorization" = "Bearer $${{ secrets.GITHUB_TOKEN }}"
+             -Method Get
+            $latest_run = $response.workflow_runs | Sort-Object -Property updated_at | Select-Object -Last 1
+            $conclusion = $latest_run.conclusion
+            if ($conclusion -eq "success") {
+            Write-Host "Workflow is successful."
+            exit 0
+           }
+          else {
+           if ($i -eq 3) {
+              Write-Host "Workflow is not successful after 3 attempts. Exiting..."
+             exit 1
+            }
+          else {
+            Write-Host "Workflow is not successful. Retrying in 3 seconds..."
+            Start-Sleep -Seconds 30
+            }
+           }
+          }
+  Build_NUnitTests:
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    uses: ./.github/workflows/Build_NUnitTests.yml
+  Build_Manual:
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    uses: ./.github/workflows/Build_Manual.yml
+  Build_Dev:
+    needs:
+      - Build_NUnitTests
+      - Build_Manual
+    runs-on:
+      
+      - windows
+    steps:
+      - name: meta_runner_test
+        run: |-
+          Consloe-Write "test meta runner"
+      - name: BuildStep_CommandLine
+        shell: cmd
+        run: |-
+          cd Test
+          echo "in test"

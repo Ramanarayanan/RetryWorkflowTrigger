@@ -9,10 +9,7 @@ on:
     workflows: BuildAndUnitTest
     types:
       - completed
-env:
-  Test_Config_Param: test_config
-  test_env: test_env
-  test_system: test_system
+
 jobs:
   on-success:
     runs-on:
@@ -22,7 +19,7 @@ jobs:
     steps:
       - name: meta_runner_test
         run: |-
-          Consloe-Write "test meta runner"
+          echo  "test meta runner"
       - name: BuildStep_CommandLine
         shell: sh
         run: |-
@@ -80,7 +77,7 @@ jobs:
     steps:
       - name: meta_runner_test
         run: |-
-          Consloe-Write "test meta runner"
+          echo  "test meta runner"
       - name: BuildStep_CommandLine
         shell: cmd
         run: |-

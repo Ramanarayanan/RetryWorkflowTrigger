@@ -47,7 +47,7 @@ jobs:
             "https://api.github.com/repos/${{ github.repository }}/actions/workflows/BuildAndUnitTest.yml/runs")
                    # echo $response
                    
-           echo "$response"
+          
            echo "this test"
            workflow_runs=$(echo "$response" | jq -r '.workflow_runs')
            echo $workflow_runs

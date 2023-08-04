@@ -42,9 +42,7 @@ jobs:
            -d '{"ref":"main"}')
            echo "Wait for: 30seconds to trigger dispatch event" \
            sleep 30s
-           response1=$(curl -s -H  \
-           -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          
+           response1=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \          
            "https://api.github.com/repos/${{ github.repository }}/actions/workflows/BuildAndUnitTest.yml/runs") 
            workflow_runs=$(echo "$response" | jq -r '.workflow_runs')
            printf "%s" $workflow_runs > workflow_runs.json\

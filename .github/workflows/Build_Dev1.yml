@@ -56,6 +56,7 @@ jobs:
            
            printf "%s" $latest_run > latest_workflow_run.json
            conclusion=$(echo "$latest_run" | jq -r '.conclusion')
+           echo "$conclusion"
           if [[ "$conclusion" == "success" ]]; then
               echo "Workflow is successful."
               break

@@ -52,13 +52,13 @@ jobs:
              if [[ "$conclusion" == "success" ]]; then
               echo "Workflow is successful."
               break
-             elif [[ "$i" == 3 ]]; then
+            elif [[ "$i" == 3 ]]; then
               echo "Workflow is not successful after 3 attempts. Exiting..."
-               exit 1
-             else
-              echo "Workflow is not successful. Retrying in 30 seconds..."
-             fi
-           done
+              exit 1
+            else
+              echo "Workflow is not successful. Retrying in 30 seconds..."            
+            fi
+          done
   Build_NUnitTests:
     if: ${{ github.event_name == 'workflow_dispatch' }}
     uses: ./.github/workflows/Build_NUnitTests.yml

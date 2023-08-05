@@ -63,6 +63,7 @@ jobs:
          
       
             conclusion=$(echo "$latest_run" | jq -r '.conclusion')
+            echo "$conclusion"
            
             
           done

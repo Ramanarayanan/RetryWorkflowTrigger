@@ -63,7 +63,7 @@ jobs:
              exit 1
             }
           else {
-            Write-Host "Workflow is not successful. Retrying in 3 seconds..."
+         
             Start-Sleep -Seconds 30
             }
            }

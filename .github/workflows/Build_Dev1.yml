@@ -32,7 +32,6 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'failure' }}
     steps:
       - name: RetryTrigger
-     
         run: |-
           for i in {1..3}
           do
@@ -60,6 +59,10 @@ jobs:
             echo "Workflow is not successful. Retrying in 30 seconds..."
            fi
           done
+      
+      
+     
+        
   Build_NUnitTests:
     if: ${{ github.event_name == 'workflow_dispatch' }}
     uses: ./.github/workflows/Build_NUnitTests.yml

@@ -37,6 +37,7 @@ jobs:
           for i in {1..3}
           do
             echo "Wait for 30 seconds to trigger dispatch event"
+            echo "$i"
           
           done
   Build_NUnitTests:

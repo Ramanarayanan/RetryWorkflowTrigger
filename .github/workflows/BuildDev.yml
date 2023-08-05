@@ -42,7 +42,7 @@ jobs:
               "Authorization" = "Bearer ${{ secrets.GITHUB_TOKEN }}"
               "Accept" = "application/vnd.github.v3+json"
             } `
-           -Method Post
+           -Method Post `
            -Body (@{"ref" = "main"}| ConvertTo-Json)
             Write-Host "Wait for 30 seconds to trigger dispatch event"
             Start-Sleep -Seconds 30

@@ -26,12 +26,12 @@ jobs:
           
             Write-Output ${{ secrets.GITHUB_TOKEN }}
             write-Host $env:GITHUB_REPOSITORY
-               $response = Invoke-RestMethod -Uri "https://api.github.com/repos/${{ github.repository }}/actions/workflows/parent3.yml/dispatches" `
+               $response = Invoke-RestMethod -Uri "https://api.github.com/repos/${{ github.repository }}/actions/workflows/parent3.yml/dispatches" 
             -Headers @{
               "Authorization" = "Bearer ${{ secrets.GITHUB_TOKEN }}"
               "Accept" = "application/vnd.github.v3+json"
-            } `
-            -Method Post `
+            } 
+            -Method Post 
             -Body (@{ "ref" = "main" } | ConvertTo-Json)
             
             Write-Host "Wait for 30 seconds to trigger dispatch event"

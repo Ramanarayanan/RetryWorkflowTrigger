@@ -59,7 +59,7 @@ jobs:
            }
           else {
            if ($i -eq 3) {
-              Write-Host "Workflow is not successful after 3 attempts. Exiting..."
+              Write-Host "Workflow is not successful after 3 attempts. Exiting..." `
              exit 1
             }
           else {

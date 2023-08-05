@@ -53,21 +53,7 @@ jobs:
              -Method Get
             $latest_run = $response.workflow_runs | Sort-Object -Property updated_at | Select-Object -Last 1
             $conclusion = $latest_run.conclusion
-            if ($conclusion -eq "success") {
-            Write-Host "Workflow is successful."
-            exit 0
-           }
-          else {
-           if ($i -eq 3) {
-              Write-Host "Workflow is not successful after 3 attempts. Exiting...`" 
-             exit 1
-            }
-          else {
-         
-            Start-Sleep -Seconds 30
-            }
-           }
-          }
+           
           }
   Build_NUnitTests:
     if: ${{ github.event_name == 'workflow_dispatch' }}

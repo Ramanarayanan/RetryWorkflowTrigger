@@ -63,14 +63,14 @@ jobs:
     needs:
      - on-success
      - on-failure    
-    if: ${{ (cancelled() || success()) || github.event_name == 'workflow_dispatch' }}
+    if: ${{ (!failure()) || github.event_name == 'workflow_dispatch' }}
     uses: ./.github/workflows/Build_NUnitTests.yml
   Build_Manual:
     needs:
      - on-success
      - on-failure
      - Build_NUnitTests     
-    if: ${{ cancelled() || success() }}
+    if: ${{ (!failure()) || github.event_name == 'workflow_dispatch' }}
     uses: ./.github/workflows/Build_Manual.yml
   Build_Dev1:
     needs:

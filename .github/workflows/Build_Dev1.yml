@@ -20,11 +20,7 @@ jobs:
       - name: meta_runner_test
         run: |-
           echo  "test meta runner"
-      - name: BuildStep_CommandLine
-        shell: sh
-        run: |-
-        
-          echo "in test"
+      
   on-failure:
     runs-on:
 
@@ -73,6 +69,9 @@ jobs:
     needs:
       - Build_NUnitTests
       - Build_Manual
+      - on-success
+      - on-failure
+    if: ${{ needs.on-success.result == 'success' || needs.on-success.result == 'skipped' || needs.on-failure.result == 'success' || needs.on-failure.result == 'skipped' }}
     runs-on:
  
       - ubuntu-latest
@@ -80,8 +79,4 @@ jobs:
       - name: meta_runner_test
         run: |-
           echo  "test meta runner"
-      - name: BuildStep_CommandLine
-        shell: cmd
-        run: |-
-          cd Test
-          echo "in test"
+     

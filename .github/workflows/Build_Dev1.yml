@@ -79,7 +79,7 @@ jobs:
       - Build_Manual
       - on-success
       - on-failure
-    if: ${{ (!failure()) && ((needs.on-success.result == 'success' || needs.on-success.result == 'skipped') && (needs.on-failure.result == 'success' || needs.on-failure.result == 'skipped')) }}
+    if: ${{ !failure() }}
     runs-on:
  
       - ubuntu-latest
